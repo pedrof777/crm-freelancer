@@ -2,6 +2,8 @@ import OrcamentoForm from "@/src/components/OrcamentoForm";
 import OrcamentoItem from "@/src/components/OrcamentoItem";
 import { supabase } from "@/src/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export default async function OrcamentoPage() {
   const { data: orcamento, error } = await supabase
     .from("orcamentos")

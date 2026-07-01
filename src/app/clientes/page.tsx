@@ -2,6 +2,8 @@ import ClienteForm from "@/src/components/ClienteForm";
 import ClienteItem from "@/src/components/ClienteItem";
 import { supabase } from "@/src/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export default async function ClientePages() {
   const { data: clientes, error } = await supabase.from("clientes").select("*");
 

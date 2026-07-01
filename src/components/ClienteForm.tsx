@@ -16,12 +16,17 @@ export default function ClienteForm() {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.from("clientes").insert({
-      nome,
-      email,
-      telefone: telefone || null,
-      empresa: empresa || null,
-    });
+    const { data, error } = await supabase
+      .from("clientes")
+      .insert({
+        nome,
+        email,
+        telefone: telefone || null,
+        empresa: empresa || null,
+      })
+      .select();
+    console.log("DATA:", data);
+    console.log("ERROR:", error);
 
     setLoading(false);
 
