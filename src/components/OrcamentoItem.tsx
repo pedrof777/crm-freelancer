@@ -40,6 +40,7 @@ export default function OrcamentoItem({ orcamento }: Props) {
   const [valor, setValor] = useState(String(orcamento.valor));
   const [status, setStatus] = useState(orcamento.status);
   const [loading, setLoading] = useState(false);
+  const [excluindo, setExcluindo] = useState(false);
 
   async function handleSalvar() {
     setLoading(true);
@@ -64,12 +65,15 @@ export default function OrcamentoItem({ orcamento }: Props) {
     const confirmar = confirm(`Excluir o orçamento "${orcamento.titulo}"?`);
     if (!confirmar) return;
 
+    setExcluindo(true);
+
     const { error } = await supabase
       .from("orcamentos")
       .delete()
       .eq("id", orcamento.id);
 
     if (error) {
+      setExcluindo(false);
       alert("Erro ao excluir: " + error.message);
       return;
     }
@@ -147,6 +151,7 @@ export default function OrcamentoItem({ orcamento }: Props) {
 
         <button
           onClick={handleDelete}
+          disabled={excluindo}
           className="text-sm text-red-500 hover:text-red-400"
         >
           {"Excluir"}

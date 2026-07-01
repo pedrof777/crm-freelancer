@@ -9,16 +9,13 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("useEffect executou");
     async function fetchTotais() {
-      console.log("fetchTotais iniciou");
       try {
-        const { data: clientes, error: errorCliente } = await supabase
+        const { count: clientes, error: errorCliente } = await supabase
           .from("clientes")
           .select("*", { count: "exact", head: true });
-        console.log("clientes:", clientes, "erro:", errorCliente);
 
-        const { data: orcamentos, error: errorOrcamento } = await supabase
+        const { count: orcamentos, error: errorOrcamento } = await supabase
           .from("orcamentos")
           .select("*", { count: "exact", head: true });
 
@@ -28,8 +25,8 @@ export default function Home() {
         }
 
         setTotais({
-          clientes: clientes?.length ?? 0,
-          orcamento: orcamentos?.length ?? 0,
+          clientes: clientes ?? 0,
+          orcamento: orcamentos ?? 0,
         });
       } catch (error) {
         console.error("Erro inesperado:", error);

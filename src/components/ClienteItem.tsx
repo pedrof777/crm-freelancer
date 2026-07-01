@@ -22,6 +22,7 @@ export default function ClienteItem({ cliente }: Props) {
   const [nome, setNome] = useState(cliente.nome);
   const [email, setEmail] = useState(cliente.email);
   const [loading, setLoading] = useState(false);
+  const [excluindo, setExcluindo] = useState(false);
 
   async function handleSave() {
     setLoading(true);
@@ -48,12 +49,15 @@ export default function ClienteItem({ cliente }: Props) {
     );
     if (!confirmar) return;
 
+    setExcluindo(true);
+
     const { error } = await supabase
       .from("clientes")
       .delete()
       .eq("id", cliente.id);
 
     if (error) {
+      setExcluindo(false);
       alert("Erro ao excluir: " + error.message);
       return;
     }
@@ -96,7 +100,11 @@ export default function ClienteItem({ cliente }: Props) {
   }
 
   return (
-    <li className="border border-gray-700 rounded-md p-4 flex items-center justify-between">
+    <li
+      className={`border border-gray-700 rounded-md p-4 flex items-center justify-between transition-opacity ${
+        excluindo ? "opacity-40 pointer-events-none" : ""
+      }`}
+    >
       <div>
         <p className="font-medium">{cliente.nome}</p>
         <p className="text-sm text-gray-400">{cliente.email}</p>
@@ -104,6 +112,7 @@ export default function ClienteItem({ cliente }: Props) {
       <div className="flex gap-2">
         <button
           onClick={() => setEditando(true)}
+          disabled={excluindo}
           className="text-sm text-gray-400 hover:text-white"
         >
           {"Editar"}
@@ -111,9 +120,10 @@ export default function ClienteItem({ cliente }: Props) {
 
         <button
           onClick={handleDelete}
-          className="text-sm text-red-500 hover:text-red-400"
+          disabled={excluindo}
+          className="text-sm text-red-500 hover:text-red-400 disabled:opacity-50"
         >
-          {"Excluir"}
+          {excluindo ? "Excluindo..." : "Excluir"}
         </button>
       </div>
     </li>
